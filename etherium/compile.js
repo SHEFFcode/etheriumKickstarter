@@ -11,11 +11,9 @@ const output = solc.compile(source, 1).contracts
 
 fs.ensureDirSync(buildPath)
 
-console.log(output)
-
 for (let contract in output) {
   fs.outputJsonSync(
-    path.resolve(buildPath, contract + '.json'),
+    path.resolve(buildPath, `${contract.substring(1)}.json`),
     output[contract]
   )
 }
