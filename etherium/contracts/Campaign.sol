@@ -39,7 +39,7 @@ contract Campaign {
         minimumContribution = minimum;
     }
     
-    function contribute() public payable restricted {
+    function contribute() public payable {
         approvers[msg.sender] = true;
         approversCount++;
     }
