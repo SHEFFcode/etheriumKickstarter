@@ -54,20 +54,15 @@ contract Campaign {
             approverCount: 0,
             complete: false
         });
-        
         requests.push(newRequest);
     }
     
     function approveRequest(uint index) public {
         Request storage request = requests[index];
-        
-        
         require(approvers[msg.sender]);
         require(!requests[index].approvals[msg.sender]);
-        
         request.approvals[msg.sender] = true;
         request.approverCount++;
-        
     }
     
     function finalizeRequest(uint index) public restricted {
@@ -77,6 +72,21 @@ contract Campaign {
         
         request.recepient.transfer(request.value);
         request.complete = true;
-        
+    }
+
+    function getSummary() public view returns (
+        uint, uint, uint, uint, address
+    ) {
+        return (
+            minimumContribution,
+            this.balance, // comes from instance of a contract
+            requests.length,
+            approversCount,
+            manager
+        );
+    }
+
+    function getRequestsCount() public view returns (uint) {
+        requests.length;
     }
 }
