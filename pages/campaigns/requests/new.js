@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Button, Label, Input } from 'semantic-ui-react'
+import { Form, Button, Label, Input, Message } from 'semantic-ui-react'
 import Campaign from '../../../etherium/Campaign'
 import web3 from '../../../etherium/web3'
 import { Link, Router } from '../../../routes'
@@ -28,6 +28,7 @@ class RequestNew extends Component {
       await campaign.methods
         .createRequest(description, web3.utils.toWei(value, 'ether'), recepient)
         .send({ from: accounts[0] })
+      Router.pushRoute(`/campaigns/${this.props.address}/requests`)
     } catch (err) {
       this.setState({ errorMessage: err.message })
     }
@@ -37,8 +38,11 @@ class RequestNew extends Component {
     const { description, recepient, value } = this.state
     return (
       <Layout>
+        <Link route={`/campaigns/${this.props.address}/requests`}>
+          <a>Back</a>
+        </Link>
         <h3>Create an approval request</h3>
-        <Form onSubmit={this.onSubmit}>
+        <Form onSubmit={this.onSubmit} error={Boolean(this.state.errorMessage)}>
           <Form.Field>
             <Label>Description</Label>
             <Input
@@ -60,6 +64,7 @@ class RequestNew extends Component {
               onChange={e => this.setState({ recepient: e.target.recepient })}
             />
           </Form.Field>
+          <Message error header={'Ooops'} content={this.state.errorMessage} />
           <Button primary loading={this.state.loading}>
             Create
           </Button>
