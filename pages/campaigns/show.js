@@ -11,7 +11,6 @@ class CampaignShow extends Component {
     const { address } = props.query
     const campaign = Campaign(address)
     const summary = await campaign.methods.getSummary().call()
-    console.log(summary[2])
     return {
       address: props.query.address,
       minimumContribution: summary[0],
