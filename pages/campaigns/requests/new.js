@@ -9,18 +9,36 @@ class RequestNew extends Component {
   state = {
     value: '',
     description: '',
-    recepient: ''
+    recepient: '',
+    loading: false,
+    errorMessage: ''
   }
   static async getInitialProps(props) {
     const { address } = props.query
     return { address }
+  }
+
+  onSubmit = async e => {
+    e.preventDefault()
+    this.setState({ loading: true, errorMessage: '' })
+    const campaign = Campaign(this.props.address)
+    const { description, value, recepient } = this.state
+    try {
+      const accounts = await web3.eth.getAccounts()
+      await campaign.methods
+        .createRequest(description, web3.utils.toWei(value, 'ether'), recepient)
+        .send({ from: accounts[0] })
+    } catch (err) {
+      this.setState({ errorMessage: err.message })
+    }
+    this.setState({ loading: false })
   }
   render() {
     const { description, recepient, value } = this.state
     return (
       <Layout>
         <h3>Create an approval request</h3>
-        <Form>
+        <Form onSubmit={this.onSubmit}>
           <Form.Field>
             <Label>Description</Label>
             <Input
@@ -39,10 +57,12 @@ class RequestNew extends Component {
             <Label>Recepient</Label>
             <Input
               value={recepient}
-              onChange={e => this.setState({ value: e.target.recepient })}
+              onChange={e => this.setState({ recepient: e.target.recepient })}
             />
           </Form.Field>
-          <Button primary>Create</Button>
+          <Button primary loading={this.state.loading}>
+            Create
+          </Button>
         </Form>
       </Layout>
     )
