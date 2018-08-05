@@ -76,11 +76,13 @@ class CampaignShow extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Link route={`/campaigns/${address}/requests`}>
-              <a>
-                <Button primary>View Requests</Button>
-              </a>
-            </Link>
+            <Grid.Column>
+              <Link route={`/campaigns/${address}/requests`}>
+                <a>
+                  <Button primary>View Requests</Button>
+                </a>
+              </Link>
+            </Grid.Column>
           </Grid.Row>
         </Grid>
       </Layout>
