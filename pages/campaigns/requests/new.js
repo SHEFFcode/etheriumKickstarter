@@ -61,7 +61,7 @@ class RequestNew extends Component {
             <Label>Recepient</Label>
             <Input
               value={recepient}
-              onChange={e => this.setState({ recepient: e.target.recepient })}
+              onChange={e => this.setState({ recepient: e.target.value })}
             />
           </Form.Field>
           <Message error header={'Ooops'} content={this.state.errorMessage} />
