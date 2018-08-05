@@ -11,9 +11,9 @@ class RequestIndexPage extends Component {
   render() {
     const { address } = this.props
     return (
-      <Layout route={`/campaigns/${address}/requests/new`}>
+      <Layout>
         <h3>Request list</h3>
-        <Link>
+        <Link route={`/campaigns/${address}/requests/new`}>
           <a>
             <Button primary>Add Request</Button>
           </a>
