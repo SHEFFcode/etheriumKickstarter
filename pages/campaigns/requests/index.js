@@ -3,12 +3,14 @@ import { Button, Table, Tab } from 'semantic-ui-react'
 import { Link } from '../../../routes'
 import Layout from '../../../components/Layout'
 import Campaign from '../../../etherium/Campaign'
+import RequestRow from '../../../components/RequestRow'
 
 class RequestIndexPage extends Component {
   static async getInitialProps(props) {
     const { address } = props.query
     const campaign = Campaign(address)
-    const requestCount = await campaign.methods.getRequestsCount.call()
+    const requestCount = await campaign.methods.getRequestsCount().call()
+    console.log(requestCount)
     const requests = await Promise.all(
       Array(parseInt(requestCount))
         .fill()
@@ -17,6 +19,22 @@ class RequestIndexPage extends Component {
         })
     )
     return { address, requests, requestCount }
+  }
+
+  renderRows() {
+    return (
+      this.props.requests &&
+      this.props.requests.length &&
+      this.props.requests.map((request, index) => {
+        return (
+          <RequestRow
+            key={index}
+            request={request}
+            address={this.props.address}
+          />
+        )
+      })
+    )
   }
   render() {
     const { Header, Row, HeaderCell, Body } = Table
@@ -40,6 +58,7 @@ class RequestIndexPage extends Component {
               <HeaderCell>Finalize</HeaderCell>
             </Row>
           </Header>
+          <Body>{this.renderRows()}</Body>
         </Table>
       </Layout>
     )
